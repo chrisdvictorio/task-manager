@@ -1,5 +1,6 @@
 package com.victorio.taskmanager.dto;
 
+import com.victorio.taskmanager.entity.TaskDifficulty;
 import com.victorio.taskmanager.entity.TaskStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class TaskResponseDto {
     private String title;
     private String description;
     private TaskStatus status;
+    private TaskDifficulty difficulty;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

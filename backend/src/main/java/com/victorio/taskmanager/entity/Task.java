@@ -27,6 +27,10 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private TaskStatus status = TaskStatus.PENDING;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TaskDifficulty difficulty;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 

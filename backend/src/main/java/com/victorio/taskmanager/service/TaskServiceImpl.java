@@ -31,6 +31,8 @@ public class TaskServiceImpl implements TaskService {
             task.setStatus(TaskStatus.PENDING);
         }
 
+        task.setDifficulty(requestDto.getDifficulty());
+
         Task savedTask = taskRepository.save(task);
         return mapToResponseDto(savedTask);
     }
@@ -52,7 +54,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskResponseDto updateTask(Long id, TaskRequestDto requestDto) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("No task found with id: " + id));
 
         task.setTitle(requestDto.getTitle());
         task.setDescription(requestDto.getDescription());
@@ -64,7 +66,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteTask(Long id) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("No task found with id: " + id));
         taskRepository.delete(task);
     }
 
@@ -74,6 +76,7 @@ public class TaskServiceImpl implements TaskService {
         dto.setTitle(task.getTitle());
         dto.setDescription(task.getDescription());
         dto.setStatus(task.getStatus());
+        dto.setDifficulty(task.getDifficulty());
         dto.setCreatedAt(task.getCreatedAt());
         dto.setUpdatedAt(task.getUpdatedAt());
         return dto;
