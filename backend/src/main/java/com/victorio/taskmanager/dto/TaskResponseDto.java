@@ -1,5 +1,6 @@
 package com.victorio.taskmanager.dto;
 
+import com.victorio.taskmanager.entity.TaskStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ public class TaskResponseDto {
     private Long id;
     private String title;
     private String description;
+    private TaskStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
