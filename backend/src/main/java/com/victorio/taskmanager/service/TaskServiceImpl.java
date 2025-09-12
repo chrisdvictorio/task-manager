@@ -23,6 +23,11 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponseDto createTask(TaskRequestDto requestDto) {
         Task task = new Task();
         task.setTitle(requestDto.getTitle());
+
+        if (taskRepository.existsByTitle(requestDto.getTitle())) {
+            throw new RuntimeException("Task title must be unique");
+        }
+
         task.setDescription(requestDto.getDescription());
 
         if (requestDto.getStatus() != null) {
@@ -56,8 +61,16 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No task found with id: " + id));
 
-        task.setTitle(requestDto.getTitle());
-        task.setDescription(requestDto.getDescription());
+        // Check uniqueness for update: ignore current task's id
+        if (requestDto.getTitle() != null &&
+                taskRepository.existsByTitleAndIdNot(requestDto.getTitle(), id)) {
+            throw new RuntimeException("Task title must be unique");
+        }
+
+        if (requestDto.getTitle() != null) task.setTitle(requestDto.getTitle());
+        if (requestDto.getDescription() != null) task.setDescription(requestDto.getDescription());
+        if (requestDto.getStatus() != null) task.setStatus(requestDto.getStatus());
+        if (requestDto.getDifficulty() != null) task.setDifficulty(requestDto.getDifficulty());
 
         Task updatedTask = taskRepository.save(task);
         return mapToResponseDto(updatedTask);
