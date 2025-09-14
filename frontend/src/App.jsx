@@ -9,9 +9,9 @@ import ErrorPage from "./pages/ErrorPage";
 
 const App = () => {
   return (
-    <div>
+    <div className="flex flex-col min-h-dvh font-poppins">
       <Header />
-      <main>
+      <main className="flex flex-1 py-12 px-8 md:px-12 xl:px-36 bg-[#F9F9F9]">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/*" element={<ErrorPage />} />
