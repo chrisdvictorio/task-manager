@@ -29,15 +29,12 @@ const EditModal = ({ task, setTasks, setIsEditModalOpen }) => {
         `http://localhost:8080/api/tasks/${task.id}`,
         formData
       );
-
-      // update task list with edited task
       setTasks((prev) =>
         prev.map((t) => (t.id === task.id ? response.data : t))
       );
-
       setIsEditModalOpen(false);
     } catch (error) {
-      setError("Failed to update task.");
+      setError(error.response.data.message);
       console.error(error);
     } finally {
       setLoading(false);
