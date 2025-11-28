@@ -5,7 +5,9 @@ import com.victorio.taskmanager.dto.TaskResponseDto;
 import com.victorio.taskmanager.entity.Task;
 import com.victorio.taskmanager.entity.TaskStatus;
 import com.victorio.taskmanager.repository.TaskRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,17 +27,11 @@ public class TaskServiceImpl implements TaskService {
         task.setTitle(requestDto.getTitle());
 
         if (taskRepository.existsByTitle(requestDto.getTitle())) {
-            throw new RuntimeException("Task title must be unique");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task title must be unique");
         }
 
         task.setDescription(requestDto.getDescription());
-
-        if (requestDto.getStatus() != null) {
-            task.setStatus(requestDto.getStatus());
-        } else {
-            task.setStatus(TaskStatus.PENDING);
-        }
-
+        task.setStatus(requestDto.getStatus() != null ? requestDto.getStatus() : TaskStatus.PENDING);
         task.setDifficulty(requestDto.getDifficulty());
 
         Task savedTask = taskRepository.save(task);
@@ -45,7 +41,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskResponseDto getTaskById(Long id) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found with id: " + id));
         return mapToResponseDto(task);
     }
 
@@ -59,12 +55,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskResponseDto updateTask(Long id, TaskRequestDto requestDto) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No task found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No task found with id: " + id));
 
-        // Check uniqueness for update: ignore current task's id
-        if (requestDto.getTitle() != null &&
-                taskRepository.existsByTitleAndIdNot(requestDto.getTitle(), id)) {
-            throw new RuntimeException("Task title must be unique");
+        if (requestDto.getTitle() != null && taskRepository.existsByTitleAndIdNot(requestDto.getTitle(), id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task title must be unique");
         }
 
         if (requestDto.getTitle() != null) task.setTitle(requestDto.getTitle());
@@ -79,7 +73,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteTask(Long id) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No task found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No task found with id: " + id));
         taskRepository.delete(task);
     }
 

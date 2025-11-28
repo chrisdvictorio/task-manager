@@ -44,8 +44,8 @@ const HomePage = () => {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <section id="homepage" className="h-full space-y-8">
-      <div className="flex items-center justify-between">
+    <section id="homepage" className="h-full w-full space-y-8">
+      <div className="flex items-center justify-between w-full">
         <ul className="hidden md:flex items-center justify-between px-2 py-1 gap-2 rounded-md shadow-md border border-[#EBECEF]">
           <li
             onClick={() => setFilterTask("All")}
@@ -107,7 +107,7 @@ const HomePage = () => {
           />
         )}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-8 w-full h-full ">
+      <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-8 w-full h-full">
         {filteredTasks.map((task) => (
           <Task key={task.id} task={task} setTasks={setTasks} />
         ))}

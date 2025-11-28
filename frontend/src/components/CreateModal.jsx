@@ -34,9 +34,9 @@ const CreateModal = ({ setIsCreateModalOpen, setTasks }) => {
         status: "PENDING",
         difficulty: "EASY",
       });
-      setIsModalOpen(false);
+      setIsCreateModalOpen(false);
     } catch (error) {
-      setError(`${error.response.data.message}`);
+      setError(`${error.response.data.error}`);
       console.error(error);
     } finally {
       setLoading(false);
